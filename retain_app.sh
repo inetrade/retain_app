@@ -122,7 +122,6 @@ query_show_tables='
 SHOW TABLES;
 '
 
-
 query_get_users='
 SELECT
     f_first,
@@ -153,6 +152,35 @@ FROM
 WHERE
     f_indexed = 2
 '
+
+query_message_count='
+SELECT
+    COUNT(message_id)
+FROM t_message'
+
+query_avg_file_size='
+SELECT
+    AVG(f_size)
+FROM
+    t_dsref
+'
+
+query_file_count='
+SELECT
+    COUNT(ds_reference_id)
+FROM
+    t_dsref
+'
+
+# entweder 1 oder 2
+# wenn der wert 
+# 12 8 und 4 
+# 192 ist als -64 dargestellt
+# und 192
+# minus ist gesetzt Fehler
+# zahl ist art des Fehlers
+# ungleich 1 oder 2
+
 
 query_items_count='
 SELECT

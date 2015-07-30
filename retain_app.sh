@@ -845,6 +845,7 @@ show_help () {
 show_queries () {
   echo
   echo 'Use one of the following queries:'
+  echo 'e.g.: ./retain_app.sh -q 4'
   echo
   echo '    1: query_show_tables'
   echo '    2: query_get_users'

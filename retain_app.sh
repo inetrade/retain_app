@@ -30,7 +30,7 @@ retain_log_dir=/var/log/retain-tomcat7
 tmpdir=/tmp
 tmp_file_installed_schema=$tmpdir/ra_installed_schema.tmp
 tmp_file_fresh_schema=$tmpdir/ra_fresh_schema.tmp
-schema_download_url=http://www.inetra.de/download/schema_3301ga1
+schema_download_url="https://raw.githubusercontent.com/inetrade/retain_app/master/retain_keys_35.dat"
 
 # indexer monitor files
 indexer_monitor_init_timestamp=$tmpdir/indexer_monitor_init_timestamp
@@ -215,6 +215,14 @@ WHERE
     f_size > GT_SIZE
 AND f_size < LT_SIZE;
 '
+query_get_keys="
+SELECT DISTINCT
+    TABLE_NAME,
+    INDEX_NAME
+FROM
+    INFORMATION_SCHEMA.STATISTICS
+WHERE TABLE_SCHEMA = 'retain'
+"
 
 
 # INITIALISATION
@@ -474,30 +482,12 @@ check_db_conn () {
 
 
 get_install_keys () {
-
-  installdump=$(mysqldump --no-data -u $db_user \
-                          -p${db_password} \
-                          --ignore-table=retain.attachment \
-                          --ignore-table=retain.Document \
-                          --ignore-table=retain.t_msg_properties \
-                          --ignore-table=retain.t_recp_properties \
-                          --ignore-table=retain.t_recipients \
-                          --ignore-table=retain.Email \
-                          --ignore-table=retain.Node \
-                          $db_name)
-
-  echo "$installdump" | grep '  KEY\|CREATE TABLE'  |
-  sed 's/,$//g' | sort  > $tmpdir/$tmp_file_installed_schema
-
+  $sql_command "$query_get_keys" | sed 's/ \+/ /g' | sort > $tmp_file_installed_schema
 }
 
 
 get_fresh_keys () {
-
-  curl --silent "$schema_download_url" |
-  grep '  KEY\|CREATE TABLE'  |
-  sed 's/,$//g' | sort  > $tmpdir/$tmp_file_fresh_schema
-
+  curl --silent "$schema_download_url" | sort  > $tmp_file_fresh_schema
 }
 
 
@@ -731,8 +721,8 @@ key_check () {
         get_fresh_keys
 
 
-        schema_diff=$(comm -3 $tmpdir/$tmp_file_installed_schema \
-        $tmpdir/$tmp_file_fresh_schema)
+        schema_diff=$(comm -3 $tmp_file_installed_schema \
+        $tmp_file_fresh_schema)
 
 
         if [[ $schema_diff != "" ]]; then
@@ -749,7 +739,7 @@ key_check () {
         fi
 
         # clean up
-        rm $tmpdir/$tmp_file_installed_schema $tmpdir/$tmp_file_fresh_schema
+        rm $tmp_file_installed_schema $tmp_file_fresh_schema
 
       else
 
@@ -962,6 +952,9 @@ do
           ;;
         13)
           $sql_command_formatted "$query_attachments_size"
+          ;;
+        14)
+          $sql_command_formatted "$query_get_keys"
           ;;
       esac
 

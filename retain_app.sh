@@ -482,7 +482,7 @@ check_db_conn () {
 
 
 get_install_keys () {
-  $sql_command "$query_get_keys" | sed 's/ \+/ /g' | sort > $tmp_file_installed_schema
+  $sql_command "$query_get_keys" | sed 's/ \+/ /g' | sed 's/\t/ /g' | sort > $tmp_file_installed_schema
 }
 
 

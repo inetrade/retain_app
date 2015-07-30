@@ -40,6 +40,7 @@ indexer_monitor_data_file=$tmpdir/indexer_monitor_data
 indexer_status_file=/srv/www/htdocs/indexer_status.txt
 cronjob='-* * * * *       root    /root/retain_app.sh -m'
 
+
 # ENVIRONMENT
 ###############################################################################
 
@@ -50,12 +51,10 @@ latest_version=$(grep -m1 'version=' <<<"$latest_file")
 
 
 # get a timestamp
-
 timestamp=$(date)
 
 
 # formatting
-
 retain_app_head="retain_app ($version) - "\
 "command line utility for retain administrators"
 topic_wrapper="#########################################"\
@@ -63,7 +62,6 @@ topic_wrapper="#########################################"\
 
 
 # program messages
-
 msg_new_version_available="NOTE: New version available!"
 msg_offer_update="An update for this script is available. "\
 "Use latest version? [y/n]: "
@@ -85,13 +83,11 @@ error_tmp_not_writable="TMP directory not writable."
 cronrestart="/etc/init.d/cron restart"
 
 # retain log keywords
-
 str_job_start="registering Job with name:"
 str_job_end="unregistering Job with name:"
 
 
 # filters
-
 declare -a log_filters_default
 
 log_filters_default+=('LOGGING IN AS')

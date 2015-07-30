@@ -144,7 +144,7 @@ SELECT
 FROM
     t_message
 WHERE
-    f_indexed = 2
+    f_indexed = 1
 '
 
 query_message_count='
@@ -842,6 +842,27 @@ show_help () {
   exit 0
 }
 
+show_queries () {
+  echo
+  echo 'Use one of the following queries:'
+  echo
+  echo '    1: query_show_tables'
+  echo '    2: query_get_users'
+  echo '    3: query_configured_jobs'
+  echo '    4: query_indexed_items_count'
+  echo '    5: query_message_count'
+  echo '    6: query_avg_file_size'
+  echo '    7: query_file_count'
+  echo '    8: query_items_count'
+  echo '    9: query_db_schema_version'
+  echo '   10: query_db_mig_version'
+  echo '   11: query_stored_mime_count'
+  echo '   12: query_attachments_all'
+  echo '   13: query_attachments_size'
+  echo
+
+  exit 0
+}
 
 # PROGRAMM
 ###############################################################################
@@ -897,10 +918,53 @@ do
 
     -q | --query)
       if [ ! $2 ]; then
-        echo $error_no_query
+        show_queries
         exit 1
       fi
-      query $2
+      case $2 in
+
+        1)
+          $sql_command_formatted "$query_show_tables"
+          ;;
+        2)
+          $sql_command_formatted "$query_get_users"
+          ;;
+        3)
+          $sql_command_formatted "$query_configured_jobs"
+          ;;
+        4)
+          $sql_command_formatted "$query_indexed_items_count"
+          ;;
+        5)
+          $sql_command_formatted "$query_message_count"
+          ;;
+        6)
+          $sql_command_formatted "$query_avg_file_size"
+          ;;
+        7)
+          $sql_command_formatted "$query_file_count"
+          ;;
+        8)
+          $sql_command_formatted "$query_items_count"
+          ;;
+        9)
+          $sql_command_formatted "$query_db_schema_version"
+          ;;
+        10)
+          $sql_command_formatted "$query_db_mig_version"
+          ;;
+        11)
+          $sql_command_formatted "$query_stored_mime_count"
+          ;;
+        12)
+          $sql_command_formatted "$query_attachments_all"
+          ;;
+        13)
+          $sql_command_formatted "$query_attachments_size"
+          ;;
+      esac
+
+
       shift 2
     ;;
 

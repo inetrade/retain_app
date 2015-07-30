@@ -4,4 +4,4 @@ SELECT DISTINCT
     FROM
         INFORMATION_SCHEMA.STATISTICS
     WHERE TABLE_SCHEMA = 'retain'
-    
+-- comment

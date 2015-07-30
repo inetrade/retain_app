@@ -25,8 +25,6 @@ version=0.9.93
 
 asconfig=/opt/beginfinite/retain/RetainServer/WEB-INF/cfg/ASConfig.cfg
 retain_log_dir=/var/log/retain-tomcat7
-server_log_cleaner_opt_file=/root/clean_rtn_srv.opt
-worker_log_cleaner_opt_file=/root/clean_rtn_wrk.opt
 
 # temp data
 tmpdir=/tmp
@@ -171,16 +169,6 @@ SELECT
 FROM
     t_dsref
 '
-
-# entweder 1 oder 2
-# wenn der wert 
-# 12 8 und 4 
-# 192 ist als -64 dargestellt
-# und 192
-# minus ist gesetzt Fehler
-# zahl ist art des Fehlers
-# ungleich 1 oder 2
-
 
 query_items_count='
 SELECT

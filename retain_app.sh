@@ -337,6 +337,11 @@ initialize () {
                                   --table $db_name \
                                   --execute "
 
+      sql_dump_command="mysqldump \
+                        --host=$db_host \
+                        --user=$db_user \
+                        --password=$db_password $db_name"
+
       check_db_conn
 
     ;;
@@ -783,6 +788,19 @@ get_errors () {
 
 }
 
+dump_schema () {
+
+  if [[ "$db_access" = true ]]; then
+
+    $sql_dump_command "--no-data"
+
+  else
+
+    echo $error_no_db_access
+
+  fi
+
+}
 
 get_summary () {
 
@@ -809,15 +827,16 @@ show_help () {
   "expression, e.g. '-04-\\ | -05-'"
   echo "  -I | --id <Job-ID>      : filters job ID"
   echo
-  echo "  -J | --runjobs  : shows jobs IDs that did run at least once jobs"
-  echo "  -d | --dbstats  : shows statistics of retain db"
-  echo "  -m | --monitor  : monitor indexer performance"
-  echo "  -K | --keycheck : checks retain db for missing keys / indexes"
-  echo "  -e | --errors   : shows all GW error codes"
-  echo "  -j | --jobs     : shows CONFIGURED retain jobs"
-  echo "  -s | --summary  : show archive job summary WITH errors"
-  echo "  -i | --info     : print system information"
-  echo "  -u | --users    : shows known retain users"
+  echo "  -J | --runjobs     : shows jobs IDs that did run at least once jobs"
+  echo "  -d | --dbstats     : shows statistics of retain db"
+  echo "  -m | --monitor     : monitor indexer performance"
+  echo "  -K | --keycheck    : checks retain db for missing keys / indexes"
+  echo "  -e | --errors      : shows all GW error codes"
+  echo "  -j | --jobs        : shows CONFIGURED retain jobs"
+  echo "  -s | --summary     : show archive job summary WITH errors"
+  echo "  -S | --dump-schema : dump db schema"
+  echo "  -i | --info        : print system information"
+  echo "  -u | --users       : shows known retain users"
   echo
   echo "  -q | -query <option>: execute query, use without argument for a listing"
   echo
@@ -846,6 +865,7 @@ show_queries () {
   echo '   11: query_stored_mime_count'
   echo '   12: query_attachments_all'
   echo '   13: query_attachments_size'
+  echo '   14: query_get_keys'
   echo
 
   exit 0
@@ -996,6 +1016,12 @@ do
 
     -s|--summary)
       get_summary
+      shift 1
+    ;;
+
+
+    -S|--dump-schema)
+      dump_schema
       shift 1
     ;;
 

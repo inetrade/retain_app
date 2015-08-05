@@ -18,7 +18,7 @@
 # -----------------------------------------------------------------------------
 
 # version
-version=0.9.93
+version=0.9.95
 
 # CONFIGURATION
 ###############################################################################
@@ -731,6 +731,13 @@ key_check () {
           echo "second column: missing in local DB"
 
           echo "$schema_diff"
+
+          deprecated_tables=$(echo $schema_diff | grep 'Email\|Document')
+          if [[ $deprecated_tables != "" ]]; then
+            echo
+            echo "You still have retain 2.x tables in you database. See docs how to fix:"
+            echo 'http://support.gwava.com/kb/?View=entry&EntryID=2208'
+          fi
 
         else
 
